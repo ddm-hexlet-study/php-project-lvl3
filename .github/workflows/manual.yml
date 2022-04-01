@@ -16,10 +16,4 @@ jobs:
           run: make install
         - name: Linter Test
           run: make lint
-© 2022 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Docs
 
