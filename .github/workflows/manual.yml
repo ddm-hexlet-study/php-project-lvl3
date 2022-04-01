@@ -1,0 +1,25 @@
+name: main Workflow
+on: [push]
+jobs:
+ main:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Check out repository code
+          uses: actions/checkout@v2
+        - name: install dependencies
+          uses: shivammathur/setup-php@v2
+          with:
+                php-version: '8.1'
+                coverage: xdebug
+                tools: phpcs, phpunit
+        - name: install
+          run: make install
+        - name: Linter Test
+          run: make lint
+© 2022 GitHub, Inc.
+Terms
+Privacy
+Security
+Status
+Docs
+
