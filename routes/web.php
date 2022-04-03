@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\UrlController;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +18,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('main');
 });
+
+Route::get('/urls', [UrlController::class, 'showUrls']);
+
+Route::get('/urls/{id}', [UrlController::class, 'getUrl'])->name('url');
+
+Route::post('/', [UrlController::class, 'addUrl']);
