@@ -16,4 +16,5 @@ jobs:
           run: make install
         - name: Linter Test
           run: make lint
-
+        - name: PhpUnit Test
+          run: make test
