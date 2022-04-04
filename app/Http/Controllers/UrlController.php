@@ -11,12 +11,15 @@ class UrlController extends Controller
     public function getUrl($urlId)
     {
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $urlId)->first();
+        if ($url === null) {
+            abort(404);
+        }
         return view('url', ['url' => $url]);
     }
 
     public function addUrl(Request $request)
     {
-        $request->validate([
+        $ddd = $request->validate([
             'url.name' => 'required|url|max:255'
         ]);
         $url = $request->input('url');
@@ -32,7 +35,8 @@ class UrlController extends Controller
         return view('main');
     }
 
-    public function showUrls() {
+    public function showUrls()
+    {
         $urls = DB::table('urls')->get();
         return view('urls', ['urls' => $urls]);
     }

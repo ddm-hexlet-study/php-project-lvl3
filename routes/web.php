@@ -17,7 +17,7 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', function () {
+Route::get('/', function (Request $request) {
     return view('main');
 });
 
@@ -25,4 +25,4 @@ Route::get('/urls', [UrlController::class, 'showUrls']);
 
 Route::get('/urls/{id}', [UrlController::class, 'getUrl'])->name('url');
 
-Route::post('/', [UrlController::class, 'addUrl']);
+Route::post('/urls', [UrlController::class, 'addUrl'])->name('store');
