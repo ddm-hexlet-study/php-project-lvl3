@@ -38,14 +38,14 @@
                         <tr>
                             <th>ID</th>
                             <th>Имя</th>
-                            <th>Дата создания</th>
+                            <th>Последняя проверка</th>
                             <th>Код ответа</th>
                         </tr>
                         @foreach ($urls as $url)
                         <tr>
                             <td>{{$url->id}}</td>
                             <td><a href="{{route('url', ['id' => $url->id])}}">{{$url->name}}</a></td>
-                            <td>{{$url->created_at}}</td>
+                            <td>{{$url->latest_created_at}}</td>
                             <td></td>
                         </tr>
                         @endforeach
