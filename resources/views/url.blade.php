@@ -64,6 +64,7 @@
                         <th>Дата создания</th>
                     </tr>
                     @foreach ($checks as $check)
+                    
                     <tr>
                         <td>{{$check->id}}</td>
                         <td>{{$check->status_code}}</td>
