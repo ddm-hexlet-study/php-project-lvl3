@@ -30,21 +30,10 @@
                 </div>
             </nav>
         </header>
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        {{ $error }}
-                    @endforeach
-                </ul>
-            </div>
-        @elseif(Session::has('status'))
-            <div class="alert alert-info">
-                <ul> 
-                    {{Session::get('status')}}
-                </ul>
-            </div>
-        @endif
+        
+        @include('flash::message')
+        
+        
         <main class="flex-grow-1">
             <div class="container-lg mt-3">
                 <div class="row">

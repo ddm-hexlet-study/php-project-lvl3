@@ -46,7 +46,7 @@
                             <td>{{$url->id}}</td>
                             <td><a href="{{route('url', ['id' => $url->id])}}">{{$url->name}}</a></td>
                             <td>{{$url->latest_created_at}}</td>
-                            <td></td>
+                            <td>{{$url->status_code}}</td>
                         </tr>
                         @endforeach
                     </table>

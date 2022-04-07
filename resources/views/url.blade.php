@@ -29,7 +29,7 @@
                 </div>
             </nav>
         </header>
-
+        @include('flash::message')
         <main class="flex-grow-1">
             <div class="container-lg">
                 <h1 class="mt-5 mb-3">Сайт: {{$url->name}}</h1>
@@ -67,9 +67,9 @@
                     <tr>
                         <td>{{$check->id}}</td>
                         <td>{{$check->status_code}}</td>
-                        <td>{{$check->h1}}</td>
-                        <td>{{$check->title}}</td>
-                        <td>{{$check->description}}</td>
+                        <td>{{Str::limit($check->h1, 10)}}</td>
+                        <td>{{Str::limit($check->title, 30)}}</td>
+                        <td>{{Str::limit($check->description, 30)}}</td>
                         <td>{{$check->created_at}}</td>
                     </tr>
                     @endforeach

@@ -6,7 +6,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 
 class UrlControllerTest extends TestCase
 {
@@ -21,7 +21,7 @@ class UrlControllerTest extends TestCase
         $testTableSize = 10;
         for ($i = 0; $i < $testTableSize; $i++) {
             $name = $this->faker->url();
-            DB::table('urls')->insert(['id' => $i, 'name' => $name, 'created_at' => Carbon::now(self::GMT)]);
+            DB::table('urls')->insert(['id' => $i, 'name' => $name, 'created_at' => now(self::GMT)]);
         }
     }
 
@@ -37,15 +37,15 @@ class UrlControllerTest extends TestCase
     {
         $oldUrl = (array) DB::table('urls')->select('name')->inRandomOrder()->first();
         $response = $this->post(route('store', ['url' => $oldUrl]));
-        $response->assertSessionHas('status', 'Страница уже существует');
+        $response->assertSee('Страница уже существует');
 
         $newUrl = ['name' => $this->faker->url()];
         $response = $this->post(route('store', ['url' => $newUrl]));
-        $response->assertSessionHas('status', 'Страница добавлена');
+        $this->assertDatabaseHas('urls', ['name' => $newUrl]);
 
         $invalidUrl = ['name' => 'aaaa'];
         $response = $this->post(route('store', ['url' => $invalidUrl]));
-        $response->assertSessionHasErrors("url.name");
+        $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
 
     public function testShowUrls()
@@ -58,6 +58,7 @@ class UrlControllerTest extends TestCase
     public function testCheckUrl()
     {
         $id = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
+        Http::fake();
         $response = $this->post(route('check', $id));
         $response->assertRedirect(route('url', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);

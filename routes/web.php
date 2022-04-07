@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\UrlController;
+use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
 /*
@@ -19,7 +20,7 @@ use Carbon\Carbon;
 
 Route::get('/', function (Request $request) {
     return view('main');
-});
+})->name('main');
 
 Route::get('/urls', [UrlController::class, 'showUrls']);
 
