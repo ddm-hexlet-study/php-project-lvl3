@@ -58,7 +58,9 @@ class UrlControllerTest extends TestCase
     public function testCheckUrl()
     {
         $id = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
-        Http::fake();
+        Http::fake([
+            '*' => HTTP::response('stub response')
+        ]);
         $response = $this->post(route('check', $id));
         $response->assertRedirect(route('url', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
