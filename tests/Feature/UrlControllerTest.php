@@ -21,7 +21,7 @@ class UrlControllerTest extends TestCase
         $testTableSize = 10;
         for ($i = 0; $i < $testTableSize; $i++) {
             $name = $this->faker->url();
-            DB::table('urls')->insert(['id' => $i, 'name' => $name, 'created_at' => now(self::GMT)]);
+            DB::table('urls')->insert(['id' => $i, 'name' => "{$name}{$i}, 'created_at' => now(self::GMT)]);
         }
     }
 
