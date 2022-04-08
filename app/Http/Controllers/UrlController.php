@@ -10,8 +10,6 @@ use DiDom\Document;
 
 class UrlController extends Controller
 {
-    private const GMT = '0';
-
     public function new(Request $request)
     {
         //print_r($request->input('url'));
@@ -37,7 +35,7 @@ class UrlController extends Controller
         return view('urls', ['urls' => $urls]);
     }
 
-    public function show($urlId)
+    public function show(int $urlId)
     {
         $id = (int) $urlId;
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $id)->first();
@@ -61,7 +59,7 @@ class UrlController extends Controller
         $url = $request->input('url');
         $oldData = DB::table('urls')->where('name', '=', $url['name'])->first();
         if ($oldData === null) {
-            $date = now(self::GMT);
+            $date = now();
             $id = DB::table('urls')->insertGetId([
                'name' => $url['name'],
                'created_at' => $date
@@ -74,7 +72,7 @@ class UrlController extends Controller
         return redirect()->route('urls.show', $id);
     }
 
-    public function check($urlId)
+    public function check(int $urlId)
     {
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
         if (optional($url)->name === null) {
@@ -92,7 +90,7 @@ class UrlController extends Controller
         $title = optional($body->first('title'))->text();
         $description = optional($body->first('meta[name="description"]'))->attr('content');
         $status = $response->status();
-        $date = now(self::GMT);
+        $date = now();
 
         $data = DB::table('url_checks')->
             insert([

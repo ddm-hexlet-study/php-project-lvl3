@@ -13,8 +13,6 @@ class UrlControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    private const GMT = '0';
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -23,7 +21,7 @@ class UrlControllerTest extends TestCase
             $name = $this->faker->url();
             DB::table('urls')->insert([
                 'id' => $i, 'name' => "{$name}{$i}",
-                'created_at' => now(self::GMT)
+                'created_at' => now()
             ]);
         }
     }
@@ -44,7 +42,6 @@ class UrlControllerTest extends TestCase
     public function testShow()
     {
         $url = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
-        var_dump($url->id);
         $response = $this->get(route('urls.show', $url->id));
         $response->assertSeeText($url->name);
     }
@@ -53,7 +50,6 @@ class UrlControllerTest extends TestCase
     {
         $oldUrl = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
-        //var_dump($oldUrl->id);
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
         $newUrl = ['name' => $this->faker->url()];
