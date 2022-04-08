@@ -77,7 +77,6 @@ class UrlController extends Controller
 
     public function check($urlId)
     {
-        $date = now(self::GMT);
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
         if ($url === null) {
             return redirect()->route('urls.index');
@@ -95,7 +94,8 @@ class UrlController extends Controller
         $title = optional($body->first('title'))->text();
         $description = optional($body->first('meta[name="description"]'))->attr('content');
         $status = $response->status();
-
+        $date = now(self::GMT)->toDateTimeString();
+        
         $data = DB::table('url_checks')->
             insert([
                 'url_id' => $urlId,
