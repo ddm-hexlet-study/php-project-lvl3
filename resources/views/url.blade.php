@@ -13,17 +13,17 @@
     <body class="min-vh-100 d-flex flex-column">
         <header class="flex-shrink-0">
             <nav class="navbar navbar-expand-md navbar-dark bg-dark px-3">
-                <a class="navbar-brand" href="/">Анализатор страниц</a>
+                <a class="navbar-brand" href="{{route('urls.new')}}">Анализатор страниц</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link active" href="/">Главная</a>
+                            <a class="nav-link active" href="{{route('urls.new')}}">Главная</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " href="/urls">Сайты</a>
+                            <a class="nav-link " href="{{route('urls.index')}}">Сайты</a>
                         </li>
                     </ul>
                 </div>
@@ -50,7 +50,7 @@
                     </table>
                 </div>
                 <h2 class="mt-5 mb-3">Проверки</h2>
-                <form method="post" action="{{route('check', ['id' => $url->id])}}">
+                <form method="post" action="{{route('urls.check', ['id' => $url->id])}}">
                     @csrf
                     <input type="submit" class="btn btn-primary" value="Запустить проверку"><br /><br />
                 </form>

@@ -18,14 +18,12 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', function (Request $request) {
-    return view('main');
-})->name('main');
+Route::get('/', [UrlController::class, 'new'])->name('urls.new');
 
-Route::get('/urls', [UrlController::class, 'showUrls']);
+Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
 
-Route::get('/urls/{id}', [UrlController::class, 'getUrl'])->name('url');
+Route::get('/urls/{id}', [UrlController::class, 'show'])->name('urls.show');
 
-Route::post('/urls', [UrlController::class, 'addUrl'])->name('store');
+Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
 
-Route::post('/url/{id}/checks', [UrlController::class, 'checkUrl'])->name('check');
+Route::post('/url/{id}/checks', [UrlController::class, 'check'])->name('urls.check');

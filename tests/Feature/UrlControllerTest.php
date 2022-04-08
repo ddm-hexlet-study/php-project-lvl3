@@ -25,44 +25,50 @@ class UrlControllerTest extends TestCase
         }
     }
 
-    public function testGetUrl()
+    public function testNew()
+    {
+        $response = $this->get(route('urls.new'));
+        $response->assertOk();
+    }
+
+    public function testIndex()
+    {
+        $url = DB::table('urls')->select('name')->inRandomOrder()->first();
+        $response = $this->get(route('urls.index'));
+        $response->assertSeeText($url->name);
+    }
+
+    public function testShow()
     {
         $url = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
-        $response = $this->get(route('url', $url->id));
+        $response = $this->get(route('urls.show', $url->id));
         $response->assertSeeText($url->name);
     }
     
 
-    public function testAddUrl()
+    public function testStore()
     {
         $oldUrl = (array) DB::table('urls')->select('name')->inRandomOrder()->first();
-        $response = $this->post(route('store', ['url' => $oldUrl]));
+        $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertSee('Страница уже существует');
 
         $newUrl = ['name' => $this->faker->url()];
-        $response = $this->post(route('store', ['url' => $newUrl]));
+        $response = $this->post(route('urls.store', ['url' => $newUrl]));
         $this->assertDatabaseHas('urls', ['name' => $newUrl]);
 
         $invalidUrl = ['name' => 'aaaa'];
-        $response = $this->post(route('store', ['url' => $invalidUrl]));
+        $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
 
-    public function testShowUrls()
-    {
-        $urls = DB::table('urls')->get();
-        $response = $this->get('/urls', ['urls' => $urls]);
-        $response->assertOk();
-    }
-
-    public function testCheckUrl()
+    public function testCheck()
     {
         $id = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
         Http::fake([
             '*' => HTTP::response('stub response')
         ]);
-        $response = $this->post(route('check', $id));
-        $response->assertRedirect(route('url', $id));
+        $response = $this->post(route('urls.check', $id));
+        $response->assertRedirect(route('urls.show', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
     }
 }
