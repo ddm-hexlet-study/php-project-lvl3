@@ -42,7 +42,7 @@ class UrlController extends Controller
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $id)->first();
         $checks = DB::table('url_checks')->where('url_id', '=', $id)->simplePaginate(15) ?? [];
         if ($url === null) {
-            abort(404);
+            return redirect()->route('urls.index');
         }
         return view('url', ['url' => $url, 'checks' => $checks]);
     }
