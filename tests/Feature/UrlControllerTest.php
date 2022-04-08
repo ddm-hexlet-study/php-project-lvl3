@@ -27,7 +27,7 @@ class UrlControllerTest extends TestCase
 
     public function testNew()
     {
-        $response = $this->get(route('urls.new'));
+        $response = $this->get(route('index'));
         $response->assertOk();
     }
 
@@ -68,11 +68,11 @@ class UrlControllerTest extends TestCase
         Http::fake([
             '*' => HTTP::response('stub response')
         ]);
-        $response = $this->get(route('urls.check', $id));
+        $response = $this->post(route('urls.check', $id));
         $response->assertRedirect(route('urls.show', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
 
-        $response = $this->get(route('urls.check', 'dfdfdgfgfgf'));
+        $response = $this->post(route('urls.check', 'dfdfdgfgfgf'));
         $response->assertRedirect(route('urls.index'));
     }
 }

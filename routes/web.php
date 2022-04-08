@@ -18,7 +18,7 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', [UrlController::class, 'new'])->name('urls.new');
+Route::get('/', [UrlController::class, 'new'])->name('index');
 
 Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
 
@@ -26,4 +26,4 @@ Route::get('/urls/{id}', [UrlController::class, 'show'])->name('urls.show');
 
 Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
 
-Route::get('/url/{id}/checks', [UrlController::class, 'check'])->name('urls.check');
+Route::post('/url/{id}/checks', [UrlController::class, 'check'])->name('urls.check');
