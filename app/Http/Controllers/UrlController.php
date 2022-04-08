@@ -57,9 +57,10 @@ class UrlController extends Controller
         }
 
         $url = $request->input('url');
-        if (DB::table('urls')->where('name', '=', $url)->exists()) {
+        if (DB::table('urls')->where('name', '=', $url['name'])->exists()) {
+            $oldData = DB::table('urls')->select('id')->where('name', '=', $url['name'])->first();
             flash('Страница уже существует')->info();
-            return view('main');
+            return redirect(route('urls.show', $oldData->id));
         }
         $date = now(self::GMT);
 

@@ -48,15 +48,15 @@ class UrlControllerTest extends TestCase
 
     public function testStore()
     {
-        $oldUrl = (array) DB::table('urls')->select('name')->inRandomOrder()->first();
+        $oldUrl = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
-        $response->assertSee('Страница уже существует');
+        $response->assertRedirect(route('urls.show', $oldUrl->id));
 
         $newUrl = ['name' => $this->faker->url()];
         $response = $this->post(route('urls.store', ['url' => $newUrl]));
         $this->assertDatabaseHas('urls', ['name' => $newUrl]);
 
-        $invalidUrl = ['name' => 'aaaa'];
+        $invalidUrl = ['id' => 1, 'name' => 'aaaa'];
         $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
