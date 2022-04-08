@@ -52,8 +52,8 @@ class UrlController extends Controller
             'url.name' => 'required|url|max:255'
         ]);
         if ($validator->fails()) {
-            flash('Некорректный URL')->error();
-            return redirect()->route('urls.new');
+            //flash('Некорректный URL')->error();
+            return redirect()->route('urls.new')->withErrors($validator);
         }
 
         $url = $request->input('url');
