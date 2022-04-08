@@ -72,7 +72,7 @@ class UrlControllerTest extends TestCase
         $response->assertRedirect(route('urls.show', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
 
-        $response = $this->post(route('urls.check', 'dfdfd'));
-        $response->assertRedirect(route('urls.show', 'dfdfd'));
+        $response = $this->post(route('urls.check', 'dfdfdgfgfgf'));
+        $response->assertRedirect(route('urls.index'));
     }
 }

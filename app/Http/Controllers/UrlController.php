@@ -53,7 +53,6 @@ class UrlController extends Controller
             'url.name' => 'required|url|max:255'
         ]);
         if ($validator->fails()) {
-            //flash('Некорректный URL')->error();
             return redirect()->route('urls.new')->withErrors($validator);
         }
 
@@ -78,6 +77,9 @@ class UrlController extends Controller
     {
         $date = now(self::GMT);
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
+        if ($url === null) {
+            return redirect()->route('urls.index');
+        }
     
         try {
             $response = Http::get($url->name);
