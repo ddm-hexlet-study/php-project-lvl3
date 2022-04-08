@@ -69,7 +69,6 @@ class UrlController extends Controller
         DB::table('urls')->insert([
            ['name' => $url['name'], 'created_at' => $date]
         ]);
-        
         $newData = DB::table('urls')->select('id')->where('name', '=', $url)->first();
         flash('Страница успешно добавлена')->info();
         return redirect(route('urls.show', $newData->id));
@@ -81,7 +80,6 @@ class UrlController extends Controller
         if ($url === null) {
             return redirect()->route('urls.index');
         }
-    
         try {
             $response = Http::get($url->name);
         } catch (\Exception $exception) {

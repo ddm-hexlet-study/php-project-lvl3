@@ -49,7 +49,6 @@ class UrlControllerTest extends TestCase
         $response->assertSeeText($url->name);
     }
     
-
     public function testStore()
     {
         $oldUrl = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
