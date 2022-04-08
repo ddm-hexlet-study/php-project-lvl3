@@ -13,7 +13,7 @@ class UrlControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    private const GMT = '3';
+    private const GMT = '0';
 
     protected function setUp(): void
     {
@@ -23,7 +23,7 @@ class UrlControllerTest extends TestCase
             $name = $this->faker->url();
             DB::table('urls')->insert([
                 'id' => $i, 'name' => "{$name}{$i}",
-                'created_at' => now(self::GMT)->toDateTimeString()
+                'created_at' => now(self::GMT)
             ]);
         }
     }

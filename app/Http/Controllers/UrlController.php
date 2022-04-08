@@ -10,7 +10,7 @@ use DiDom\Document;
 
 class UrlController extends Controller
 {
-    private const GMT = '3';
+    private const GMT = '0';
 
     public function new(Request $request)
     {
@@ -94,8 +94,8 @@ class UrlController extends Controller
         $title = optional($body->first('title'))->text();
         $description = optional($body->first('meta[name="description"]'))->attr('content');
         $status = $response->status();
-        $date = now(self::GMT)->toDateTimeString();
-        
+        $date = now(self::GMT);
+
         $data = DB::table('url_checks')->
             insert([
                 'url_id' => $urlId,
