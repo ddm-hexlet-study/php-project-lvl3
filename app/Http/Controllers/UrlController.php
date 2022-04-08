@@ -69,7 +69,7 @@ class UrlController extends Controller
         
         $newData = DB::table('urls')->select('id')->where('name', '=', $url)->first();
         flash('Страница успешно добавлена')->info();
-        return redirect(route('url.show', $newData->id));
+        return redirect(route('urls.show', $newData->id));
     }
 
     public function check($urlId)
