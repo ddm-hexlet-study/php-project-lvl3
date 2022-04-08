@@ -14,6 +14,17 @@ jobs:
                 tools: phpcs, phpunit
         - name: install
           run: make install
+        - name: Create temporary sqlite database
+          run: |
+            mkdir -p database
+            touch database/database.sqlite
+        - name: Run laravel database migrations
+          env:
+            DB_CONNECTION: sqlite
+            DB_DATABASE: database/database.sqlite
+          run: php artisan migrate --force
+        - name: Install NPM dependencies
+          run: npm install
         - name: Linter Test
           run: make lint
         - name: PhpUnit Test
