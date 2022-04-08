@@ -42,6 +42,7 @@ class UrlControllerTest extends TestCase
     {
         $url = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
         $response = $this->get(route('urls.show', $url->id));
+        //var_dump($url->id);
         $response->assertSeeText($url->name);
     }
     
@@ -70,5 +71,8 @@ class UrlControllerTest extends TestCase
         $response = $this->post(route('urls.check', $id));
         $response->assertRedirect(route('urls.show', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
+
+        $response = $this->post(route('urls.check', 'dfdfd'));
+        $response->assertRedirect(route('urls.show', 'dfdfd'));
     }
 }

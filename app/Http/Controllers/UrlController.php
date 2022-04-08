@@ -38,8 +38,9 @@ class UrlController extends Controller
 
     public function show($urlId)
     {
-        $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $urlId)->first();
-        $checks = DB::table('url_checks')->where('url_id', '=', $urlId)->simplePaginate(15) ?? [];
+        $id = (int) $urlId;
+        $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $id)->first();
+        $checks = DB::table('url_checks')->where('url_id', '=', $id)->simplePaginate(15) ?? [];
         if ($url === null) {
             abort(404);
         }
@@ -80,7 +81,7 @@ class UrlController extends Controller
     
         try {
             $response = Http::get($url->name);
-        } catch (\Illuminate\Http\Client\ConnectionException $exception) {
+        } catch (\Exception $exception) {
             flash($exception->getMessage())->error();
             return redirect()->route('urls.show', $urlId);
         }
