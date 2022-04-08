@@ -12,8 +12,9 @@ class UrlController extends Controller
 {
     private const GMT = '3';
 
-    public function new()
+    public function new(Request $request)
     {
+        //print_r($request->input('url'));
         return view('main');
     }
 
@@ -53,7 +54,8 @@ class UrlController extends Controller
             'url.name' => 'required|url|max:255'
         ]);
         if ($validator->fails()) {
-            return redirect()->route('urls.new')->withErrors($validator);
+            $url = $request->input('url');
+            return redirect()->route('index')->with('oldValue', $url['name'])->withErrors($validator);
         }
 
         $url = $request->input('url');
