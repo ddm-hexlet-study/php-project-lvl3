@@ -53,7 +53,7 @@ class UrlController extends Controller
         ]);
         if ($validator->fails()) {
             flash('Некорректный URL')->error();
-            return redirect()->route('main');
+            return redirect()->route('urls.new');
         }
 
         $url = $request->input('url');
