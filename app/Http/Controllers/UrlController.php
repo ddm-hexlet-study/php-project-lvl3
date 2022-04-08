@@ -31,7 +31,7 @@ class UrlController extends Controller
         ->select('urls.id', 'urls.name', 'latest_check.status_code', 'latest_check.latest_created_at')
                    ->leftJoinSub($latestCheck, 'latest_check', function ($join) {
                        $join->on('urls.id', '=', 'latest_check.url_id');
-                   })->get();
+                   })->simplePaginate(15);
 
         return view('urls', ['urls' => $urls]);
     }
@@ -39,7 +39,7 @@ class UrlController extends Controller
     public function show($urlId)
     {
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $urlId)->first();
-        $checks = DB::table('url_checks')->where('url_id', '=', $urlId)->get() ?? [];
+        $checks = DB::table('url_checks')->where('url_id', '=', $urlId)->simplePaginate(15) ?? [];
         if ($url === null) {
             abort(404);
         }
@@ -81,7 +81,7 @@ class UrlController extends Controller
             $response = Http::get($url->name);
         } catch (\Illuminate\Http\Client\ConnectionException $exception) {
             flash($exception->getMessage())->error();
-            return redirect()->route('url.show', $urlId);
+            return redirect()->route('urls.show', $urlId);
         }
 
         $body = new Document($response->body());
