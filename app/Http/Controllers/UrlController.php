@@ -37,9 +37,9 @@ class UrlController extends Controller
         return view('urls', ['urls' => $urls]);
     }
 
-    public function show(int $urlId)
+    public function show($urlId)
     {
-        //$id = (int) $urlId;
+        $id = (int) $urlId;
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $id)->first();
         $checks = DB::table('url_checks')->where('url_id', '=', $id)->simplePaginate(15);
         if ($url === null) {
@@ -59,21 +59,22 @@ class UrlController extends Controller
         }
 
         $url = $request->input('url');
-        $oldId = DB::table('urls')->where('name', '=', $url['name'])->first();
-        if ($oldId === null) {
+        $oldData = DB::table('urls')->where('name', '=', $url['name'])->first();
+        if ($oldData === null) {
             $date = now(self::GMT);
             $id = DB::table('urls')->insertGetId([
-               ['name' => $url['name'], 'created_at' => $date]
+               'name' => $url['name'],
+               'created_at' => $date
             ]);
             flash('Страница успешно добавлена')->info();
         } else {
-            $id = $oldId;
+            $id = $oldData->id;
             flash('Страница уже существует')->info();
         }
         return redirect()->route('urls.show', $id);
     }
 
-    public function check(int $urlId)
+    public function check($urlId)
     {
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
         if (optional($url)->name === null) {

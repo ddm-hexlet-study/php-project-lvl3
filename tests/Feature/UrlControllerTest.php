@@ -44,6 +44,7 @@ class UrlControllerTest extends TestCase
     public function testShow()
     {
         $url = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
+        var_dump($url->id);
         $response = $this->get(route('urls.show', $url->id));
         $response->assertSeeText($url->name);
     }
@@ -52,6 +53,7 @@ class UrlControllerTest extends TestCase
     {
         $oldUrl = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
+        //var_dump($oldUrl->id);
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
         $newUrl = ['name' => $this->faker->url()];
@@ -72,8 +74,5 @@ class UrlControllerTest extends TestCase
         $response = $this->post(route('urls.check', $id));
         $response->assertRedirect(route('urls.show', $id));
         $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
-
-        $response = $this->post(route('urls.check', 'dfdfdgfgfgf'));
-        $response->assertRedirect(route('urls.index'));
     }
 }
