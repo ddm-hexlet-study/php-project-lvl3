@@ -37,11 +37,11 @@ class UrlController extends Controller
         return view('urls', ['urls' => $urls]);
     }
 
-    public function show($urlId)
+    public function show(int $urlId)
     {
-        $id = (int) $urlId;
+        //$id = (int) $urlId;
         $url = DB::table('urls')->select('name', 'id', 'created_at')->where('id', '=', $id)->first();
-        $checks = DB::table('url_checks')->where('url_id', '=', $id)->simplePaginate(15) ?? [];
+        $checks = DB::table('url_checks')->where('url_id', '=', $id)->simplePaginate(15);
         if ($url === null) {
             return redirect()->route('urls.index');
         }
@@ -59,25 +59,24 @@ class UrlController extends Controller
         }
 
         $url = $request->input('url');
-        if (DB::table('urls')->where('name', '=', $url['name'])->exists()) {
-            $oldData = DB::table('urls')->select('id')->where('name', '=', $url['name'])->first();
+        $oldId = DB::table('urls')->where('name', '=', $url['name'])->first();
+        if ($oldId === null) {
+            $date = now(self::GMT);
+            $id = DB::table('urls')->insertGetId([
+               ['name' => $url['name'], 'created_at' => $date]
+            ]);
+            flash('Страница успешно добавлена')->info();
+        } else {
+            $id = $oldId;
             flash('Страница уже существует')->info();
-            return redirect(route('urls.show', $oldData->id));
         }
-        $date = now(self::GMT);
-
-        DB::table('urls')->insert([
-           ['name' => $url['name'], 'created_at' => $date]
-        ]);
-        $newData = DB::table('urls')->select('id')->where('name', '=', $url)->first();
-        flash('Страница успешно добавлена')->info();
-        return redirect(route('urls.show', $newData->id));
+        return redirect()->route('urls.show', $id);
     }
 
-    public function check($urlId)
+    public function check(int $urlId)
     {
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
-        if ($url === null) {
+        if (optional($url)->name === null) {
             return redirect()->route('urls.index');
         }
         try {
