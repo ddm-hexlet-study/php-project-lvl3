@@ -12,6 +12,7 @@ class UrlControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+
     protected $randomId;
 
     protected function setUp(): void
@@ -19,7 +20,6 @@ class UrlControllerTest extends TestCase
         parent::setUp();
         $testTableSize = 10;
         $collectionOfId = [];
-        
         for ($i = 0; $i < $testTableSize; $i++) {
             $name = $this->faker->url();
             $collectionOfId[] = DB::table('urls')->insertGetId([
