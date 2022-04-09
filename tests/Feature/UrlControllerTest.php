@@ -13,7 +13,7 @@ class UrlControllerTest extends TestCase
     use RefreshDatabase;
     use WithFaker;
 
-    protected $randomId;
+    protected int $randomId;
 
     protected function setUp(): void
     {
