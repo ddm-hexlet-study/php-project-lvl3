@@ -34,21 +34,21 @@ class UrlControllerTest extends TestCase
 
     public function testIndex()
     {
-        $url = DB::table('urls')->select('name')->inRandomOrder()->first();
+        $url = DB::table('urls')->inRandomOrder()->first();
         $response = $this->get(route('urls.index'));
         $response->assertSeeText($url->name);
     }
 
     public function testShow()
     {
-        $url = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
+        $url = DB::table('urls')->inRandomOrder()->first();
         $response = $this->get(route('urls.show', $url->id));
         $response->assertSeeText($url->name);
     }
 
     public function testStore()
     {
-        $oldUrl = DB::table('urls')->select('id', 'name')->inRandomOrder()->first();
+        $oldUrl = DB::table('urls')->inRandomOrder()->first();
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
