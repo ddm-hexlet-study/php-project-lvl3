@@ -12,18 +12,22 @@ class UrlControllerTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
+    protected $randomId;
 
     protected function setUp(): void
     {
         parent::setUp();
         $testTableSize = 10;
+        $collectionOfId = [];
+        
         for ($i = 0; $i < $testTableSize; $i++) {
             $name = $this->faker->url();
-            DB::table('urls')->insert([
+            $collectionOfId[] = DB::table('urls')->insertGetId([
                 'id' => $i, 'name' => "{$name}{$i}",
                 'created_at' => now()
             ]);
         }
+        $this->randomId = array_rand($collectionOfId);
     }
 
     public function testNew()
@@ -34,21 +38,21 @@ class UrlControllerTest extends TestCase
 
     public function testIndex()
     {
-        $url = DB::table('urls')->inRandomOrder()->first();
+        $url = DB::table('urls')->find($this->randomId);
         $response = $this->get(route('urls.index'));
         $response->assertSeeText($url->name);
     }
 
     public function testShow()
     {
-        $url = DB::table('urls')->inRandomOrder()->first();
+        $url = DB::table('urls')->find($this->randomId);
         $response = $this->get(route('urls.show', $url->id));
         $response->assertSeeText($url->name);
     }
 
     public function testStore()
     {
-        $oldUrl = DB::table('urls')->inRandomOrder()->first();
+        $oldUrl = DB::table('urls')->find($this->randomId);
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
