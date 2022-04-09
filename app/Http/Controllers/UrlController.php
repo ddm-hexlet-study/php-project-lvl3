@@ -75,7 +75,7 @@ class UrlController extends Controller
     public function check(int $urlId)
     {
         $url = DB::table('urls')->select('name')->where('id', '=', $urlId)->first();
-        if (optional($url)->name === null) {
+        if ($url === null || $url->name === null) {
             return redirect()->route('urls.index');
         }
         try {
