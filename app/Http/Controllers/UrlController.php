@@ -62,8 +62,9 @@ class UrlController extends Controller
         ]);
         if ($validator->fails()) {
             $url = $request->input('url');
-            flash('Некорректный URL')->error();
-            return redirect()->route('index')->with('oldValue', $url['name']);
+            return redirect()->route('index')
+                ->with('oldValue', $url['name'])
+                    ->withErrors('Некорректный URL');
         }
         $url = $request->input('url');
         $oldData = DB::table('urls')->where('name', '=', $url['name'])->first();
