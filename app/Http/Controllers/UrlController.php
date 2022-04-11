@@ -20,8 +20,6 @@ class UrlController extends Controller
 
 /**
  * Shows list of URLs and status/date of the last check.
- *
- * @param Int $urlId Id of the URL to look for
  */
     public function index()
     {
