@@ -29,7 +29,7 @@ class UrlControllerTest extends TestCase
 
     public function testIndex()
     {
-        $url = DB::table('urls')->first();
+        $url = DB::table('urls')->find(1);
         $response = $this->get(route('urls.index'));
         $response->assertOk();
         $response->assertSeeText($url->name);
@@ -37,7 +37,7 @@ class UrlControllerTest extends TestCase
 
     public function testShow()
     {
-        $url = DB::table('urls')->first();
+        $url = DB::table('urls')->find(1);
         $response = $this->get(route('urls.show', $url->id));
         $response->assertOk();
         $response->assertSeeText($url->name);
@@ -45,7 +45,7 @@ class UrlControllerTest extends TestCase
 
     public function testStore()
     {
-        $oldUrl = DB::table('urls')->first();
+        $oldUrl = DB::table('urls')->find(1);
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
@@ -72,9 +72,9 @@ class UrlControllerTest extends TestCase
     /**
      * @dataProvider providerTestCheck
      */
-    public function testCheck($key, $value)
+    public function testCheck(string $key, string $value)
     {
-        $url = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
+        $url = (array) DB::table('urls')->select('id')->find(1);
         $fakeResponse = file_get_contents('tests/fixtures/test.html');
         Http::fake([
             '*' => HTTP::response($fakeResponse)
