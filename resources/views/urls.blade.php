@@ -15,9 +15,9 @@
                 @foreach ($urls as $url)
                 <tr>
                     <td>{{$url->id}}</td>
-                    <td><a href="{{route('urls.show', ['id' => $url->id])}}">{{$url->name}}</a></td>
-                    <td>{{$url->created_at}}</td>
-                    <td>{{$url->status_code}}</td>
+                    <td><a href="{{route('urls.show', $url->id)}}">{{$url->name}}</a></td>
+                    <td>{{$checks[$url->id]->created_at ?? ''}}</td>
+                    <td>{{$checks[$url->id]->status_code ?? ''}}</td>
                 </tr>
                 @endforeach
             </table>

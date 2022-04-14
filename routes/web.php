@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\UrlController;
+use App\Http\Controllers\UrlCheckController;
 use Illuminate\Support\Facades\Http;
 use Carbon\Carbon;
 
@@ -18,12 +19,10 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/', [UrlController::class, 'new'])->name('index');
+Route::get('/', function () {
+    return view('main');
+})->name('index');
 
-Route::get('/urls', [UrlController::class, 'index'])->name('urls.index');
+Route::post('/urls/{id}/checks', UrlCheckController::class)->name('urls.check');
 
-Route::get('/urls/{id}', [UrlController::class, 'show'])->name('urls.show');
-
-Route::post('/urls', [UrlController::class, 'store'])->name('urls.store');
-
-Route::post('/urls/{id}/checks', [UrlController::class, 'check'])->name('urls.check');
+Route::resource('urls', UrlController::class);

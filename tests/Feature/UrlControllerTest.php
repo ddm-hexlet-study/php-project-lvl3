@@ -18,61 +18,69 @@ class UrlControllerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $testTableSize = 10;
-        $collectionOfId = [];
-        for ($i = 0; $i < $testTableSize; $i++) {
-            $name = $this->faker->url();
-            $collectionOfId[] = DB::table('urls')->insertGetId([
-                'id' => $i, 'name' => "{$name}{$i}",
+
+        $name = $this->faker->url();
+        $collectionOfId[] = DB::table('urls')->insertGetId([
+                'id' => 1,
+                'name' => "{$name}",
                 'created_at' => now()
             ]);
-        }
-        $this->randomId = array_rand($collectionOfId);
-    }
-
-    public function testNew()
-    {
-        $response = $this->get(route('index'));
-        $response->assertOk();
     }
 
     public function testIndex()
     {
-        $url = DB::table('urls')->find($this->randomId);
+        $url = DB::table('urls')->first();
         $response = $this->get(route('urls.index'));
+        $response->assertOk();
         $response->assertSeeText($url->name);
     }
 
     public function testShow()
     {
-        $url = DB::table('urls')->find($this->randomId);
+        $url = DB::table('urls')->first();
         $response = $this->get(route('urls.show', $url->id));
+        $response->assertOk();
         $response->assertSeeText($url->name);
     }
 
     public function testStore()
     {
-        $oldUrl = DB::table('urls')->find($this->randomId);
+        $oldUrl = DB::table('urls')->first();
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertRedirect(route('urls.show', $oldUrl->id));
 
         $newUrl = ['name' => $this->faker->url()];
         $response = $this->post(route('urls.store', ['url' => $newUrl]));
+        $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('urls', ['name' => $newUrl]);
 
-        $invalidUrl = ['id' => 1, 'name' => 'aaaa'];
+        $invalidUrl = ['name' => 'aaaa'];
         $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
+        $response->assertSessionHasErrors();
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
-
-    public function testCheck()
+    
+    public function providerTestCheck()
     {
-        $id = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
+        return [
+            ['title', 'Test title'],
+            ['description', 'Test description'],
+            ['h1', 'Test h1']
+        ];
+    }
+
+    /**
+     * @dataProvider providerTestCheck
+     */
+    public function testCheck($key, $value)
+    {
+        $url = (array) DB::table('urls')->select('id')->inRandomOrder()->first();
+        $fakeResponse = file_get_contents('tests/fixtures/test.html');
         Http::fake([
-            '*' => HTTP::response('stub response')
+            '*' => HTTP::response($fakeResponse)
         ]);
-        $response = $this->post(route('urls.check', $id));
-        $response->assertRedirect(route('urls.show', $id));
-        $this->assertDatabaseHas('url_checks', ['url_id' => $id]);
+        $response = $this->post(route('urls.check', $url['id']));
+        $response->assertRedirect(route('urls.show', $url['id']));
+        $this->assertDatabaseHas('url_checks', [$key => $value]);
     }
 }

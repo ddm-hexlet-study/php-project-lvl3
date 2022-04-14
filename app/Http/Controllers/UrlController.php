@@ -11,18 +11,11 @@ use DiDom\Document;
 class UrlController extends Controller
 {
 /**
- * Main page.
- */
-    public function new()
-    {
-        return view('main');
-    }
-
-/**
  * Shows list of URLs and status/date of the last check.
  */
     public function index()
     {
+        /*
         $latestChecks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest();
         $urls = DB::table('urls')
@@ -30,7 +23,11 @@ class UrlController extends Controller
                    ->leftJoinSub($latestChecks, 'latest_check', function ($join) {
                        $join->on('urls.id', '=', 'latest_check.url_id');
                    })->simplePaginate(15);
-        return view('urls', ['urls' => $urls]);
+                   */
+        $checks = DB::table('url_checks')
+            ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
+        $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
+        return view('urls', ['urls' => $urls, 'checks' => $checks]);
     }
 
 /**
@@ -77,39 +74,5 @@ class UrlController extends Controller
             flash('Страница уже существует')->info();
         }
         return redirect()->route('urls.show', $id);
-    }
-
-/**
- * Makes SEO check for URL
- *
- * @param Int $urlId Id of the URL to make SEO check
- */
-    public function check(int $urlId)
-    {
-        $url = DB::table('urls')->find($urlId);
-        if ($url === null) {
-            return redirect()->route('urls.index');
-        }
-        try {
-            $response = Http::get($url->name);
-        } catch (\Exception $exception) {
-            flash($exception->getMessage())->error();
-            return redirect()->route('urls.show', $urlId);
-        }
-        $body = new Document($response->body());
-        $h1 = optional($body->first('h1'))->text();
-        $title = optional($body->first('title'))->text();
-        $description = optional($body->first('meta[name="description"]'))->attr('content');
-        $status = $response->status();
-        DB::table('url_checks')->
-            insert([
-                'url_id' => $urlId,
-                'status_code' => $status,
-                'h1' => $h1,
-                'title' => $title,
-                'description' => $description,
-                'created_at' => now()
-            ]);
-        return redirect()->route('urls.show', $urlId);
     }
 }
