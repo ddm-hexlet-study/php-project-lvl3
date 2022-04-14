@@ -59,7 +59,7 @@ class UrlControllerTest extends TestCase
         $response->assertSessionHasErrors();
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
-    
+
     public function providerTestCheck()
     {
         return [
