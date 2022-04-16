@@ -15,15 +15,6 @@ class UrlController extends Controller
  */
     public function index()
     {
-        /*
-        $latestChecks = DB::table('url_checks')
-            ->distinct('url_id')->orderBy('url_id')->latest();
-        $urls = DB::table('urls')
-        ->select('urls.id', 'urls.name', 'latest_check.status_code', 'latest_check.created_at')
-                   ->leftJoinSub($latestChecks, 'latest_check', function ($join) {
-                       $join->on('urls.id', '=', 'latest_check.url_id');
-                   })->simplePaginate(15);
-                   */
         $checks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
         $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
