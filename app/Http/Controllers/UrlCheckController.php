@@ -41,7 +41,6 @@ class UrlCheckController extends Controller
                 'description' => $description,
                 'created_at' => now()
             ]);
-        //print_r($urlId);
         return redirect()->route('urls.show', $urlId);
     }
 }
