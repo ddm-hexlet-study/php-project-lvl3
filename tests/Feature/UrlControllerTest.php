@@ -7,25 +7,11 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use Tests\Feature\UrlTestsSetUp;
 
-class UrlControllerTest extends TestCase
+class UrlControllerTest extends UrlTestsSetUp
 {
-    use RefreshDatabase;
-    use WithFaker;
-
-    protected int $randomId;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $name = $this->faker->url();
-        $collectionOfId[] = DB::table('urls')->insertGetId([
-                'id' => 1,
-                'name' => "{$name}",
-                'created_at' => now()
-            ]);
-    }
+    
 
     public function testIndex()
     {
@@ -58,29 +44,5 @@ class UrlControllerTest extends TestCase
         $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
         $response->assertSessionHasErrors();
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
-    }
-
-    public function providerTestCheck()
-    {
-        return [
-            ['title', 'Test title'],
-            ['description', 'Test description'],
-            ['h1', 'Test h1']
-        ];
-    }
-
-    /**
-     * @dataProvider providerTestCheck
-     */
-    public function testCheck(string $key, string $value)
-    {
-        $url = (array) DB::table('urls')->select('id')->find(1);
-        $fakeResponse = file_get_contents('tests/fixtures/test.html');
-        Http::fake([
-            '*' => HTTP::response($fakeResponse)
-        ]);
-        $response = $this->post(route('urls.check', $url['id']));
-        $response->assertRedirect(route('urls.show', $url['id']));
-        $this->assertDatabaseHas('url_checks', [$key => $value]);
     }
 }

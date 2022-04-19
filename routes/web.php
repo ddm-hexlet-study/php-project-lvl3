@@ -23,6 +23,6 @@ Route::get('/', function () {
     return view('main');
 })->name('index');
 
-Route::post('/urls/{id}/checks', UrlCheckController::class)->name('urls.check');
+Route::resource('urls.checks', UrlCheckController::class)->only(['store']);
 
 Route::resource('urls', UrlController::class);

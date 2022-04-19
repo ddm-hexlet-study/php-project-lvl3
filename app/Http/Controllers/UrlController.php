@@ -18,7 +18,7 @@ class UrlController extends Controller
         $checks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
         $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
-        return view('urls', ['urls' => $urls, 'checks' => $checks]);
+        return view('urls', compact('urls', 'checks'));
     }
 
 /**
@@ -33,7 +33,7 @@ class UrlController extends Controller
             return redirect()->route('urls.index');
         }
         $checks = DB::table('url_checks')->where('url_id', '=', $urlId)->simplePaginate(15);
-        return view('url', ['url' => $url, 'checks' => $checks]);
+        return view('url', compact('url', 'checks'));
     }
 
 /**
@@ -56,7 +56,7 @@ class UrlController extends Controller
         $oldData = DB::table('urls')->where('name', '=', $url['name'])->first();
         if ($oldData === null) {
             $id = DB::table('urls')->insertGetId([
-               'name' => $url['name'],
+               'name' => mb_strtolower($url['name']),
                'created_at' => now()
             ]);
             flash('Страница успешно добавлена')->info();

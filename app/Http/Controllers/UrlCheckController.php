@@ -15,7 +15,7 @@ class UrlCheckController extends Controller
  *
  * @param Int $urlId Id of the URL to make SEO check
  */
-    public function __invoke(int $urlId)
+    public function store(int $urlId)
     {
         $url = DB::table('urls')->find($urlId);
         if ($url === null) {
