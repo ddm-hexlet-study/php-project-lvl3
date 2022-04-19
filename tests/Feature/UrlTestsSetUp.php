@@ -6,7 +6,6 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 
 abstract class UrlTestsSetUp extends TestCase
 {
