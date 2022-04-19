@@ -11,8 +11,6 @@ use Tests\Feature\UrlTestsSetUp;
 
 class UrlControllerTest extends UrlTestsSetUp
 {
-    
-
     public function testIndex()
     {
         $url = DB::table('urls')->find(1);
