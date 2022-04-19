@@ -11,7 +11,6 @@ use Tests\Feature\UrlTestsSetUp;
 
 class UrlCheckControllerTest extends UrlTestsSetUp
 {
-
     public function providerTestCheck()
     {
         return [
