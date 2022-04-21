@@ -18,7 +18,7 @@ class UrlController extends Controller
         $checks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
         $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
-        return view('urls', compact('urls', 'checks'));
+        return view('urls.index', compact('urls', 'checks'));
     }
 
 /**
@@ -33,13 +33,13 @@ class UrlController extends Controller
             return redirect()->route('urls.index');
         }
         $checks = DB::table('url_checks')->where('url_id', '=', $urlId)->simplePaginate(15);
-        return view('url', compact('url', 'checks'));
+        return view('urls.show', compact('url', 'checks'));
     }
 
 /**
  * Adds a new URL or shows info messages in case of this URL already exists.
  *
- * @param Request $request income resquest containing new URL data
+ * @param Request $request income request containing new URL data
  */
     public function store(Request $request)
     {

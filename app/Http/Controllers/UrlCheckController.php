@@ -12,7 +12,6 @@ class UrlCheckController extends Controller
 {
 /**
  * Makes SEO check for URL
- *
  * @param Int $urlId Id of the URL to make SEO check
  */
     public function store(int $urlId)

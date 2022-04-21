@@ -4,31 +4,38 @@ namespace Tests\Feature;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
-use Tests\Feature\UrlTestsSetUp;
+use Tests\TestCase;
 
-class UrlCheckControllerTest extends UrlTestsSetUp
+class UrlCheckControllerTest extends TestCase
 {
-    public function providerTestCheck()
+    public int $id;
+    public string $name;
+
+    protected function setUp(): void
     {
-        return [
+        parent::setUp();
+
+        $this->name = $this->faker->url();
+        $this->id = DB::table('urls')->insertGetId([
+            'id' => 1,
+            'name' => "{$this->name}",
+            'created_at' => now()
+        ]);
+    }
+
+    public function testStore()
+    {
+        $controlData = [
             ['title', 'Test title'],
             ['description', 'Test description'],
             ['h1', 'Test h1']
         ];
-    }
-
-    /**
-     * @dataProvider providerTestCheck
-     */
-    public function testStore(string $key, string $value)
-    {
-        $url = DB::table('urls')->select('id')->find(1);
         $fakeResponse = file_get_contents('tests/fixtures/test.html');
         Http::fake([
             '*' => HTTP::response($fakeResponse)
         ]);
-        $response = $this->post(route('urls.checks.store', $url->id));
-        $response->assertRedirect(route('urls.show', $url->id));
-        $this->assertDatabaseHas('url_checks', [$key => $value]);
+        $response = $this->post(route('urls.checks.store', $this->id));
+        $response->assertRedirect(route('urls.show', $this->id));
+        $this->assertDatabaseHas('url_checks', $controlData);
     }
 }

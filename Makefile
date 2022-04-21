@@ -5,7 +5,7 @@ install: #установить зависимости
 	cp -n .env.example .env || true
 	php artisan key:gen --ansi
 lint: #запуск phpcs
-	composer exec --verbose phpcs -- --standard=PSR12 src
+	composer exec --verbose phpcs -- --standard=PSR12 app tests
 test: #запуск локального теста
 	php artisan test
 test-coverage: #codeclimate
