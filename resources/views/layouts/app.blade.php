@@ -4,14 +4,15 @@
     <head>
         <meta charset="utf-8">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="csrf-param" content="_token" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <title>Анализатор страниц</title>
 
         <!-- Styles -->
-        
-        <link href="/css/app.css" rel="stylesheet">
-    
+
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
     </head>
     <body class="min-vh-100 d-flex flex-column" style="margin-bottom:100px">
         <header class="flex-shrink-0">
@@ -36,11 +37,11 @@
             <div class="alert alert-danger">
                     @foreach ($errors->all() as $error)
                         {{ $error }}
-                    @endforeach          
+                    @endforeach
             </div>
         @endif
         @include('flash::message')
-        
+
         @yield('content')
     </body>
 </html>
