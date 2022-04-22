@@ -16,7 +16,6 @@ class UrlControllerTest extends TestCase
 
         $this->name = $this->faker->url();
         $this->id = DB::table('urls')->insertGetId([
-            'id' => 1,
             'name' => "{$this->name}",
             'created_at' => now()
         ]);

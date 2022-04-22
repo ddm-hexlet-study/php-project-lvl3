@@ -9,16 +9,14 @@ use Tests\TestCase;
 class UrlCheckControllerTest extends TestCase
 {
     public int $id;
-    public string $name;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->name = $this->faker->url();
+        $name = $this->faker->url();
         $this->id = DB::table('urls')->insertGetId([
-            'id' => 1,
-            'name' => "{$this->name}",
+            'name' => "{$name}",
             'created_at' => now()
         ]);
     }
