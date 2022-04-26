@@ -17,6 +17,7 @@ class UrlController extends Controller
     {
         $checks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
+        //dd($checks);
         $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
         return view('urls.index', compact('urls', 'checks'));
     }
@@ -47,9 +48,8 @@ class UrlController extends Controller
             'url.name' => 'required|url|max:255'
         ]);
         if ($validator->fails()) {
-            $url = $request->input('url');
+            $request->flash();
             return redirect()->route('index')
-                ->with('oldValue', $url['name'])
                     ->withErrors('Некорректный URL');
         }
         $url = $request->input('url');

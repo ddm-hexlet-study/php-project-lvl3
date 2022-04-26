@@ -1,5 +1,5 @@
 start: #запуск
-	php artisan serve --host 0.0.0.0
+	php artisan serve
 install: #установить зависимости
 	composer install
 	cp -n .env.example .env || true

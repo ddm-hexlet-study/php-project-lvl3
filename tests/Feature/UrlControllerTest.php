@@ -25,27 +25,33 @@ class UrlControllerTest extends TestCase
     {
         $response = $this->get(route('urls.index'));
         $response->assertOk();
-        $response->assertSeeText($this->name);
+        $this->assertDatabaseHas('urls', ['name' => $this->name]);
     }
 
     public function testShow()
     {
         $response = $this->get(route('urls.show', $this->id));
         $response->assertOk();
-        $response->assertSeeText($this->name);
+        $this->assertDatabaseHas('urls', ['name' => $this->name]);
     }
 
-    public function testStore()
+    public function testStoreOldData()
     {
         $oldUrl = ['name' => $this->name];
         $response = $this->post(route('urls.store', ['url' => $oldUrl]));
         $response->assertRedirect(route('urls.show', $this->id));
+    }
 
+    public function testStoreNewData()
+    {
         $newUrl = ['name' => $this->faker->url()];
         $response = $this->post(route('urls.store', ['url' => $newUrl]));
         $response->assertSessionHasNoErrors();
         $this->assertDatabaseHas('urls', ['name' => $newUrl]);
+    }
 
+    public function testStoreInvalidData()
+    {
         $invalidUrl = ['name' => 'aaaa'];
         $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
         $response->assertSessionHasErrors();

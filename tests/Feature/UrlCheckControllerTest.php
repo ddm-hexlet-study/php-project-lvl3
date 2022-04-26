@@ -23,7 +23,7 @@ class UrlCheckControllerTest extends TestCase
 
     public function testStore()
     {
-        $controlData = [
+        $expectedData = [
             ['title', 'Test title'],
             ['description', 'Test description'],
             ['h1', 'Test h1']
@@ -34,6 +34,6 @@ class UrlCheckControllerTest extends TestCase
         ]);
         $response = $this->post(route('urls.checks.store', $this->id));
         $response->assertRedirect(route('urls.show', $this->id));
-        $this->assertDatabaseHas('url_checks', $controlData);
+        $this->assertDatabaseHas('url_checks', $expectedData);
     }
 }
