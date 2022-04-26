@@ -6,8 +6,8 @@ install: #установить зависимости
 	php artisan key:gen --ansi
 	npm install
 	mkdir -p database
-    touch database/database.sqlite
-    php artisan migrate --force
+	touch database/database.sqlite
+	php artisan migrate --force
 lint: #запуск phpcs
 	composer exec --verbose phpcs -- --standard=PSR12 app tests
 test: #запуск локального теста
