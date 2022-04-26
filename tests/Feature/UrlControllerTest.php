@@ -45,16 +45,14 @@ class UrlControllerTest extends TestCase
     public function testStoreNewData()
     {
         $newUrl = ['name' => $this->faker->url()];
-        $response = $this->post(route('urls.store', ['url' => $newUrl]));
-        $response->assertSessionHasNoErrors();
+        $this->post(route('urls.store', ['url' => $newUrl]));
         $this->assertDatabaseHas('urls', ['name' => $newUrl]);
     }
 
     public function testStoreInvalidData()
     {
         $invalidUrl = ['name' => 'aaaa'];
-        $response = $this->post(route('urls.store', ['url' => $invalidUrl]));
-        $response->assertSessionHasErrors();
+        $this->post(route('urls.store', ['url' => $invalidUrl]));
         $this->assertDatabaseMissing('urls', ['name' => $invalidUrl]);
     }
 }
