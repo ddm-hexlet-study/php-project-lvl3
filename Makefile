@@ -7,7 +7,7 @@ install: #установить зависимости
 	npm install
 	mkdir -p database
 	touch database/database.sqlite
-	php artisan migrate --force
+	php artisan migrate --database=database/database.sqlite --force
 lint: #запуск phpcs
 	composer exec --verbose phpcs -- --standard=PSR12 app tests
 test: #запуск локального теста
