@@ -17,7 +17,6 @@ class UrlController extends Controller
     {
         $checks = DB::table('url_checks')
             ->distinct('url_id')->orderBy('url_id')->latest()->get()->keyBy('url_id');
-        //dd($checks);
         $urls = DB::table('urls')->select('id', 'name')->simplePaginate(15);
         return view('urls.index', compact('urls', 'checks'));
     }
