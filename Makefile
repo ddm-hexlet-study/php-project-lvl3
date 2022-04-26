@@ -4,10 +4,10 @@ install: #установить зависимости
 	composer install
 	cp -n .env.example .env || true
 	php artisan key:gen --ansi
-	npm install
 	mkdir -p database
 	touch database/database.sqlite
 	php artisan migrate --database=database/database.sqlite --force
+	npm install
 lint: #запуск phpcs
 	composer exec --verbose phpcs -- --standard=PSR12 app tests
 test: #запуск локального теста
