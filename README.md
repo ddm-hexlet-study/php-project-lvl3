@@ -7,4 +7,4 @@
 Web site that anallzes given pages due to their SEO suitability.
 
 ## View example on Heroku
-https://rhubarb-crumble-17022.herokuapp.com/
+https://page-analyzer-ddm14159.herokuapp.com/
